@@ -306,7 +306,7 @@ def registrar():
 
     cleartime()
 
-    Nome = str(input("Crie um nome de usuário: "))
+    Nome = str(input("Crie um nome de usuário: ")).lower()
     senha = str(input("Crie uma senha: "))
     senha_confirmar = str(input("Confirme a sua senha, por favor: "))
 
@@ -330,7 +330,7 @@ def registrar():
         registrar()
     else:
         cursor.execute(f"INSERT INTO contas (nome_contas,senha_contas) VALUES ('{Nome}','{senha}')")
-        cursor.execute(f"INSERT INTO dados (fk_nome_contas) VALUES ('{Nome}')")
+        #cursor.execute(f"INSERT INTO dados (fk_nome_contas) VALUES ('{Nome}')")
         db.commit()
         cleartime()
         print("Dados gravados com sucesso.")
