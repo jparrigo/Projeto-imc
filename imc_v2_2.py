@@ -25,10 +25,29 @@ def cleartime():
     system("cls")
 
 def returnmenu():
-    system("cls")
-    print("Retornado ao menu ...")
-    sleep(3)
+    ld = 1
+    while ld <= 3:
+        system("cls")
+        print("Retornando ao menu" + "."*ld)
+        sleep(1)
+        ld += 1
     menu()
+
+def loading():
+    ld = 1
+    while ld <= 3:
+        system("cls")
+        print("Carregando" + "."*ld)
+        sleep(1)
+        ld += 1
+
+def exit():
+    ld = 1
+    while ld <= 3:
+        system("cls")
+        print("Desconectando" + "."*ld)
+        sleep(1)
+        ld += 1
 #--------------------------------------------------------------------------------------------------------------------------------------------------------
 #-- FUNÇÃO IMC
 #--------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -212,25 +231,72 @@ def creditos():
     input("\nPressione ENTER para retornar ao menu inicial.")
     returnmenu()
 #--------------------------------------------------------------------------------------------------------------------------------------------------------
+#-- FUNÇÃO DE HISTÓRICO
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+def historico():
+    loading()
+    cursor.execute(f"SELECT * FROM dados WHERE fk_nome_contas='{login[0]}'")
+    bancodedados = cursor.fetchall()
+
+    if bancodedados:
+        cleartime()
+        print("{:<10} {:<10} {:<10} {:<10} {:<10}".format('Usuário', 'Altura', 'Peso', 'IMC', 'Data'))
+        print("-"*50)
+        for values in bancodedados:
+            print("{:<10} {:<10} {:<10} {:<10} {:<10}".format(values[0], values[1], values[2], values[3], values[4]))
+            print("-"*50)
+    else:
+        cleartime()
+        print("Nenhum dado foi computado ainda.")
+
+    input("\nPressione ENTER para retornar ao menu inicial.")
+    returnmenu()
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#-- FUNÇÃO DE RETORNAR AO MENU DE LOGIN
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+def returnlogin():
+    cleartime()
+    exit()
+    login.clear()
+    login_registro()
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
 #-- MENU
 #--------------------------------------------------------------------------------------------------------------------------------------------------------
 def menu():
-    cleartime()
-    print(
-    "=========================="
-    "\n= 1- Calculo de IMC      ="
-    "\n= 2- Calculo de Calorias ="
-    "\n= 3- Creditos            ="
-    "\n==========================")
-    escolha = int(input("Escolha um número acima: "))
-
-    if escolha == 1:
-        imc()
-    elif escolha == 2:
-        caloria()
-    elif escolha == 3:
+    try:
         cleartime()
-        creditos()
+        print(
+        "=========================="
+        "\n= 1- Calculo de IMC      ="
+        "\n= 2- Calculo de Calorias ="
+        "\n= 3- Histórico           ="
+        "\n= 4- Creditos            ="
+        "\n= 5- Sair                ="
+        "\n==========================")
+        escolha = int(input("Escolha um número acima: "))
+
+        if escolha == 1:
+            imc()
+        elif escolha == 2:
+            caloria()
+        elif escolha == 3:
+            historico()
+        elif escolha == 4:
+            cleartime()
+            creditos()
+        elif escolha == 5:
+            cleartime()
+            returnlogin()
+        else:
+            cleartime()
+            print("Função Não Encontrada! Tente Novamente.")
+            sleep(3)
+            menu()
+    except:
+        cleartime()
+        print("Apenas números interios!")
+        sleep(3)
+        menu()
 #--------------------------------------------------------------------------------------------------------------------------------------------------------
 #-- LOGIN E REGISTRO
 #--------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -281,11 +347,12 @@ def acessar():
     bancodedados = cursor.fetchall()
 
     if bancodedados:
+        loading()
         cleartime()
         print("Login Bem-Sucedido")
         print("Bem vindo,", Nome)
         login.append(Nome)
-        sleep(3)
+        sleep(2)
         menu()
     else:
         cleartime()
